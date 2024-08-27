@@ -2,35 +2,84 @@ import React from 'react';
 
 export default class NewTaskForm extends React.Component {
   state = {
-    value: '',
+    text: '',
+    minute: '',
+    second: '',
   };
 
-  changeValue = (e) => {
-    this.setState({
-      value: e.target.value,
-    });
-  };
+  handleSubmit = (e) => {
+    e.preventDefault();
 
-  addTask = (e) => {
-    if (e.key === 'Enter') {
-      this.props.addTaskItem(this.state.value);
+    let { minute, second, text } = this.state;
 
-      this.setState({
-        value: '',
-      });
+    if (text === '') {
+      return;
     }
+
+    if (minute === '') {
+      minute = 0;
+    }
+
+    if (second === '') {
+      second = 0;
+    }
+
+    if (!this.isNumber(minute)) {
+      return;
+    }
+
+    if (!this.isNumber(second)) {
+      return;
+    }
+
+    if (second > 60) {
+      return;
+    }
+
+    if (minute > 9999) {
+      return;
+    }
+
+    this.props.addTaskItem(this.state.text, minute, second);
+  };
+
+  isNumber = (num) => {
+    console.log(num, Number(num) === 'number', !isNaN(num));
+    return typeof Number(num) === 'number' && !isNaN(num);
   };
 
   render() {
+    const { text, minute, second } = this.state;
+
     return (
-      <input
-        className="new-todo"
-        placeholder="What needs to be done?"
-        value={this.state.value}
-        onChange={this.changeValue}
-        onKeyPress={this.addTask}
-        autoFocus
-      />
+      <form className="new-todo-form" onSubmit={this.handleSubmit}>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          value={text}
+          onChange={(e) => {
+            this.setState({ text: e.target.value });
+          }}
+          autoFocus
+        />
+        <input
+          className="new-todo-form__timer"
+          value={minute}
+          onChange={(e) => {
+            this.setState({ minute: e.target.value });
+          }}
+          placeholder="Min"
+        />
+        <input
+          className="new-todo-form__timer"
+          value={second}
+          onChange={(e) => {
+            this.setState({ second: e.target.value });
+          }}
+          placeholder="Sec"
+        />
+        <input hidden type="submit" />
+      </form>
     );
   }
 }

@@ -20,6 +20,8 @@ export default class App extends React.Component {
           description: 'Completed task',
           id: 1,
           isHidden: false,
+          minutes: 0,
+          seconds: 0,
           dateOfCreation: new Date('June 25, 2024 23:15:30'),
         },
         {
@@ -27,6 +29,8 @@ export default class App extends React.Component {
           description: 'Editing task',
           id: 2,
           isHidden: false,
+          minutes: 0,
+          seconds: 0,
           dateOfCreation: new Date('June 26, 2024 16:14:11'),
         },
         {
@@ -34,6 +38,8 @@ export default class App extends React.Component {
           description: 'Active task',
           id: 3,
           isHidden: false,
+          minutes: '3',
+          seconds: '34',
           dateOfCreation: new Date('June 27, 2024 13:00:00'),
         },
       ],
@@ -82,11 +88,13 @@ export default class App extends React.Component {
       });
     };
 
-    this.createTaskItem = (text) => {
+    this.createTaskItem = (text, minutes, seconds) => {
       const newTask = {
         className: '',
         description: text,
         id: this.id++,
+        minutes: minutes,
+        seconds: seconds,
         isHidden: false,
         dateOfCreation: new Date(),
       };
@@ -94,8 +102,8 @@ export default class App extends React.Component {
       return newTask;
     };
 
-    this.addTaskItem = (text) => {
-      const newObject = [...this.state.tasks, this.createTaskItem(text)];
+    this.addTaskItem = (text, minutes, seconds) => {
+      const newObject = [...this.state.tasks, this.createTaskItem(text, minutes, seconds)];
 
       this.setState({
         tasks: newObject,
